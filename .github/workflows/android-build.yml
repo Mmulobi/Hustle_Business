@@ -36,3 +36,5 @@ jobs:
       # Build APK with EAS
       - name: Build APK
         run: eas build -p android --profile production --non-interactive
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
