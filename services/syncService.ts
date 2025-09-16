@@ -6,6 +6,7 @@ export class SyncService {
   private static instance: SyncService;
   private isOnline = false;
   private syncInProgress = false;
+  private connectionChangeListeners: ((isOnline: boolean) => void)[] = [];
 
   private constructor() {
     this.initNetworkListener();
@@ -22,6 +23,11 @@ export class SyncService {
     NetInfo.addEventListener(state => {
       const wasOffline = !this.isOnline;
       this.isOnline = state.isConnected ?? false;
+      
+      // Notify all listeners about connection change
+      this.connectionChangeListeners.forEach(listener => {
+        listener(this.isOnline);
+      });
       
       if (wasOffline && this.isOnline) {
         this.syncData();
@@ -123,6 +129,18 @@ export class SyncService {
 
   isConnected(): boolean {
     return this.isOnline;
+  }
+
+  onConnectionChange(callback: (isOnline: boolean) => void): () => void {
+    this.connectionChangeListeners.push(callback);
+    
+    // Return unsubscribe function
+    return () => {
+      const index = this.connectionChangeListeners.indexOf(callback);
+      if (index > -1) {
+        this.connectionChangeListeners.splice(index, 1);
+      }
+    };
   }
 }
 

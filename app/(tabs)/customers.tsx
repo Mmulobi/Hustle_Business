@@ -16,7 +16,7 @@ interface CustomerDebt {
   id: string;
   user_id: string;
   customer_name: string;
-  phone_number?: string;
+  customer_phone?: string;
   amount_owed: number;
   description: string;
   date_borrowed: string;
@@ -75,10 +75,8 @@ export default function CustomersScreen() {
       const debtData = {
         user_id: user.id,
         customer_name: customerName.trim(),
-        phone_number: phoneNumber.trim() || null,
-        amount: parseFloat(amount),
+        amount_owed: parseFloat(amount),
         description: description.trim() || 'Credit sale',
-        date: new Date().toISOString().split('T')[0], // YYYY-MM-DD format
         is_paid: false,
       };
 
@@ -173,10 +171,10 @@ export default function CustomersScreen() {
               <View style={styles.debtHeader}>
                 <View style={styles.customerInfo}>
                   <Text style={styles.customerName}>{debt.customer_name}</Text>
-                  {debt.phone_number && (
+                  {debt.customer_phone && (
                     <View style={styles.phoneContainer}>
                       <Phone size={12} color="#6b7280" />
-                      <Text style={styles.phoneNumber}>{debt.phone_number}</Text>
+                      <Text style={styles.phoneNumber}>{debt.customer_phone}</Text>
                     </View>
                   )}
                   <Text style={styles.debtDescription}>{debt.description}</Text>

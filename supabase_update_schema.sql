@@ -58,6 +58,7 @@ CREATE TABLE IF NOT EXISTS inventory_items (
     item_name VARCHAR(255) NOT NULL,
     quantity INTEGER DEFAULT 0,
     unit_price DECIMAL(10,2),
+    reorder_level INTEGER DEFAULT 5,
     purchase_date DATE,
     expiry_date DATE,
     supplier VARCHAR(255),
@@ -66,20 +67,52 @@ CREATE TABLE IF NOT EXISTS inventory_items (
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- Add reorder_level column to existing inventory_items table if it doesn't exist
+DO $$ 
+BEGIN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'inventory_items' AND column_name = 'reorder_level') THEN
+        ALTER TABLE inventory_items ADD COLUMN reorder_level INTEGER DEFAULT 5;
+    END IF;
+END $$;
+
 -- Create customer_debts table if it doesn't exist
 CREATE TABLE IF NOT EXISTS customer_debts (
     id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
     user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     customer_name VARCHAR(255) NOT NULL,
-    customer_phone VARCHAR(20),
+    phone_number VARCHAR(20),
     amount DECIMAL(10,2) NOT NULL,
     description TEXT,
-    date_borrowed DATE DEFAULT CURRENT_DATE,
+    date DATE DEFAULT CURRENT_DATE,
     date_due DATE,
     is_paid BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
     updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
+
+-- Update customer_debts table structure to match app expectations
+DO $$ 
+BEGIN
+    -- Rename customer_phone to phone_number if it exists
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'customer_debts' AND column_name = 'customer_phone') THEN
+        ALTER TABLE customer_debts RENAME COLUMN customer_phone TO phone_number;
+    END IF;
+    
+    -- Rename date_borrowed to date if it exists
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'customer_debts' AND column_name = 'date_borrowed') THEN
+        ALTER TABLE customer_debts RENAME COLUMN date_borrowed TO date;
+    END IF;
+    
+    -- Add phone_number column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'customer_debts' AND column_name = 'phone_number') THEN
+        ALTER TABLE customer_debts ADD COLUMN phone_number VARCHAR(20);
+    END IF;
+    
+    -- Add date column if it doesn't exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'customer_debts' AND column_name = 'date') THEN
+        ALTER TABLE customer_debts ADD COLUMN date DATE DEFAULT CURRENT_DATE;
+    END IF;
+END $$;
 
 -- Create trip_logs table if it doesn't exist
 CREATE TABLE IF NOT EXISTS trip_logs (

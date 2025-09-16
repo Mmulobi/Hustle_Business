@@ -288,6 +288,7 @@ export default function AuthScreen() {
               <Image 
                 source={currentImage.source} 
                 style={styles.heroImage}
+                resizeMode="cover"
                 onError={(error) => {
                   console.log('Image load error:', error);
                 }}
@@ -599,7 +600,6 @@ const styles = StyleSheet.create({
   heroImage: {
     width: '100%',
     height: '100%',
-    resizeMode: 'cover',
   },
   imageOverlay: {
     position: 'absolute',
@@ -719,13 +719,7 @@ const styles = StyleSheet.create({
   continueButton: {
     borderRadius: 12,
     marginBottom: 16,
-    shadowColor: '#16a34a',
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    boxShadow: '0 4px 8px rgba(22, 163, 74, 0.3)',
     elevation: 8,
   },
   buttonGradient: {
@@ -898,13 +892,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e5e7eb',
     marginTop: 8,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
     elevation: 3,
   },
   dropdownItem: {

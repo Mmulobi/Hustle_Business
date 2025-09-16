@@ -26,7 +26,7 @@ const { width } = Dimensions.get('window');
 interface InventoryItem {
   id: string;
   user_id: string;
-  item_name: string;
+  name: string; // Changed from item_name to name to match database
   category: string;
   quantity: number;
   unit_price: number;
@@ -67,7 +67,7 @@ export default function StockScreen() {
         .from('inventory_items')
         .select('*')
         .eq('user_id', user.id)
-        .order('item_name');
+        .order('name');
 
       if (error) throw error;
       setInventory(data || []);
@@ -82,7 +82,7 @@ export default function StockScreen() {
       setFilteredInventory(inventory);
     } else {
       const filtered = inventory.filter(item =>
-        item.item_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         item.category.toLowerCase().includes(searchQuery.toLowerCase())
       );
       setFilteredInventory(filtered);
@@ -105,7 +105,7 @@ export default function StockScreen() {
 
   const openEditModal = (item: InventoryItem) => {
     setEditingItem(item);
-    setItemName(item.item_name);
+    setItemName(item.name);
     setCategory(item.category);
     setQuantity(item.quantity.toString());
     setUnitPrice(item.unit_price.toString());
@@ -127,7 +127,7 @@ export default function StockScreen() {
 
       const itemData = {
         user_id: user.id,
-        item_name: itemName.trim(),
+        name: itemName.trim(), // Changed from item_name to name to match database
         category: category.trim() || 'General',
         quantity: parseInt(quantity),
         unit_price: parseFloat(unitPrice),
@@ -167,7 +167,7 @@ export default function StockScreen() {
   const handleDeleteItem = (item: InventoryItem) => {
     Alert.alert(
       'Delete Item',
-      `Are you sure you want to delete "${item.item_name}"?`,
+      `Are you sure you want to delete "${item.name}"?`,
       [
         { text: 'Cancel', style: 'cancel' },
         { 
@@ -264,7 +264,7 @@ export default function StockScreen() {
             <View key={item.id} style={styles.inventoryCard}>
               <View style={styles.itemHeader}>
                 <View style={styles.itemInfo}>
-                  <Text style={styles.itemName}>{item.item_name}</Text>
+                  <Text style={styles.itemName}>{item.name}</Text>
                   <Text style={styles.itemCategory}>{item.category}</Text>
                 </View>
                 

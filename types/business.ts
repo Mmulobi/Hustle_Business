@@ -9,10 +9,14 @@ export interface BusinessProfile {
   id: string;
   user_id: string;
   full_name: string;
+  business_name?: string;
   business_type: HustleType;
+  // Support both old and new column names for backward compatibility
+  hustle_type?: HustleType;
   location: string;
   email: string;
   phone?: string;
+  phone_number?: string;
   daily_goal: number;
   created_at: string;
   updated_at: string;

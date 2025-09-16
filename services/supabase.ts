@@ -42,3 +42,11 @@ export const supabase = (!supabaseUrl || !supabaseAnonKey)
 
 // Export a flag to check if Supabase is properly configured
 export const isSupabaseConfigured = !!(supabaseUrl && supabaseAnonKey);
+
+// Add debugging info
+console.log('Supabase Configuration:', {
+  hasUrl: !!supabaseUrl,
+  hasKey: !!supabaseAnonKey,
+  isConfigured: isSupabaseConfigured,
+  url: supabaseUrl ? `${supabaseUrl.substring(0, 20)}...` : 'undefined'
+});

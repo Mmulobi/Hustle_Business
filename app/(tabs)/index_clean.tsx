@@ -8,9 +8,9 @@ import {
   RefreshControl,
   Dimensions,
   StatusBar,
+  SafeAreaView,
   Alert,
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import {
   Home,
   Package,
