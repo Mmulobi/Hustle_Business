@@ -26,8 +26,12 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "cebee12a-f5b2-4a76-836a-071bf97a11a0"
+        "projectId": "e7e6a95d-3b82-4fab-a2d7-f9b12290c1e0"
       }
-    }
+    },
+    "android": {
+      "package": "com.mmulobi.boltexponativewind"
+    },
+    "owner": "jmiles0145"
   }
 }
