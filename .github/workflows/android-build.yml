@@ -35,9 +35,13 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      # Install Expo CLI (globally, so prebuild works)
+      - name: Install Expo CLI
+        run: npm install -g expo-cli
+
       # Prebuild Android project (creates android/ folder)
       - name: Prebuild Android project
-        run: npx expo prebuild --platform android --non-interactive
+        run: expo prebuild --platform android --non-interactive
 
       # Build release APK
       - name: Build Android APK
